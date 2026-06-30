@@ -18,7 +18,6 @@ build/
 
 # Swift Package Manager generated state
 .build/
-Packages/
 .swiftpm/xcode/package.xcworkspace/xcuserdata/
 .swiftpm/security/
 
@@ -75,4 +74,3 @@ Experiments/**/traces/*
 Experiments/**/recordings/*
 !Experiments/**/recordings/.gitkeep
 Experiments/**/screenshots/local/
-
