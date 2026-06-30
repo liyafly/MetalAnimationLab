@@ -1,7 +1,6 @@
 import Metal
-import Testing
-
 @testable import MetalRenderKit
+import Testing
 
 @Test
 func renderConfigurationRejectsInvalidSampleCount() {

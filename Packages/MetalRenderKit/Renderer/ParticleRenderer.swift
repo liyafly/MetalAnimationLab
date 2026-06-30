@@ -43,4 +43,3 @@ public final class ParticleRenderer: NSObject, MTKViewDelegate {
         commandBuffer.commit()
     }
 }
-

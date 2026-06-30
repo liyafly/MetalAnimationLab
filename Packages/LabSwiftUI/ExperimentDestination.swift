@@ -10,4 +10,3 @@ public enum ExperimentDestination: String, CaseIterable, Sendable {
         self.init(rawValue: experimentID)
     }
 }
-

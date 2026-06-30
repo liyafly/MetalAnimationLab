@@ -4,138 +4,150 @@ import MetalRenderKit
 import SwiftUI
 
 #if canImport(UIKit)
-import UIKit
+    import UIKit
 
-@MainActor
-struct LayerTreeRepresentable: UIViewRepresentable {
-    func makeUIView(context _: Context) -> LayerTreeHostView {
-        LayerTreeHostView()
+    @MainActor
+    struct LayerTreeRepresentable: UIViewRepresentable {
+        func makeUIView(context _: Context) -> LayerTreeHostView {
+            LayerTreeHostView()
+        }
+
+        func updateUIView(_: LayerTreeHostView, context _: Context) {}
     }
 
-    func updateUIView(_: LayerTreeHostView, context _: Context) {}
-}
+    @MainActor
+    struct ImplicitAnimationRepresentable: UIViewRepresentable {
+        let mode: AnimationMode
+        let runToken: Int
 
-@MainActor
-struct ImplicitAnimationRepresentable: UIViewRepresentable {
-    let mode: AnimationMode
-    let runToken: Int
+        func makeCoordinator() -> Coordinator {
+            Coordinator(runToken: runToken)
+        }
 
-    func makeCoordinator() -> Coordinator { Coordinator(runToken: runToken) }
+        func makeUIView(context _: Context) -> ImplicitAnimationHostView {
+            ImplicitAnimationHostView()
+        }
 
-    func makeUIView(context _: Context) -> ImplicitAnimationHostView {
-        ImplicitAnimationHostView()
+        func updateUIView(_ view: ImplicitAnimationHostView, context: Context) {
+            guard context.coordinator.lastRunToken != runToken else { return }
+            context.coordinator.lastRunToken = runToken
+            view.run(mode: mode)
+        }
+
+        final class Coordinator {
+            var lastRunToken: Int
+            init(runToken: Int) {
+                lastRunToken = runToken
+            }
+        }
     }
 
-    func updateUIView(_ view: ImplicitAnimationHostView, context: Context) {
-        guard context.coordinator.lastRunToken != runToken else { return }
-        context.coordinator.lastRunToken = runToken
-        view.run(mode: mode)
+    @MainActor
+    struct OffscreenRenderingRepresentable: UIViewRepresentable {
+        let usesShadowPath: Bool
+
+        func makeUIView(context _: Context) -> OffscreenRenderingHostView {
+            OffscreenRenderingHostView()
+        }
+
+        func updateUIView(_ view: OffscreenRenderingHostView, context _: Context) {
+            view.usesShadowPath = usesShadowPath
+        }
     }
 
-    final class Coordinator {
-        var lastRunToken: Int
-        init(runToken: Int) { lastRunToken = runToken }
+    @MainActor
+    struct ManualMetalLayerRepresentable: UIViewRepresentable {
+        let time: TimeInterval
+
+        func makeCoordinator() -> ManualMetalCoordinator {
+            ManualMetalCoordinator()
+        }
+
+        func makeUIView(context: Context) -> PlatformMetalLayerView {
+            let view = PlatformMetalLayerView()
+            context.coordinator.configure(view: view)
+            return view
+        }
+
+        func updateUIView(_ view: PlatformMetalLayerView, context: Context) {
+            context.coordinator.draw(view: view, time: time, scale: view.window?.screen.scale ?? 2)
+        }
     }
-}
-
-@MainActor
-struct OffscreenRenderingRepresentable: UIViewRepresentable {
-    let usesShadowPath: Bool
-
-    func makeUIView(context _: Context) -> OffscreenRenderingHostView {
-        OffscreenRenderingHostView()
-    }
-
-    func updateUIView(_ view: OffscreenRenderingHostView, context _: Context) {
-        view.usesShadowPath = usesShadowPath
-    }
-}
-
-@MainActor
-struct ManualMetalLayerRepresentable: UIViewRepresentable {
-    let time: TimeInterval
-
-    func makeCoordinator() -> ManualMetalCoordinator { ManualMetalCoordinator() }
-
-    func makeUIView(context: Context) -> PlatformMetalLayerView {
-        let view = PlatformMetalLayerView()
-        context.coordinator.configure(view: view)
-        return view
-    }
-
-    func updateUIView(_ view: PlatformMetalLayerView, context: Context) {
-        context.coordinator.draw(view: view, time: time, scale: view.window?.screen.scale ?? 2)
-    }
-}
 
 #elseif canImport(AppKit)
-import AppKit
+    import AppKit
 
-@MainActor
-struct LayerTreeRepresentable: NSViewRepresentable {
-    func makeNSView(context _: Context) -> LayerTreeHostView {
-        LayerTreeHostView()
+    @MainActor
+    struct LayerTreeRepresentable: NSViewRepresentable {
+        func makeNSView(context _: Context) -> LayerTreeHostView {
+            LayerTreeHostView()
+        }
+
+        func updateNSView(_: LayerTreeHostView, context _: Context) {}
     }
 
-    func updateNSView(_: LayerTreeHostView, context _: Context) {}
-}
+    @MainActor
+    struct ImplicitAnimationRepresentable: NSViewRepresentable {
+        let mode: AnimationMode
+        let runToken: Int
 
-@MainActor
-struct ImplicitAnimationRepresentable: NSViewRepresentable {
-    let mode: AnimationMode
-    let runToken: Int
+        func makeCoordinator() -> Coordinator {
+            Coordinator(runToken: runToken)
+        }
 
-    func makeCoordinator() -> Coordinator { Coordinator(runToken: runToken) }
+        func makeNSView(context _: Context) -> ImplicitAnimationHostView {
+            ImplicitAnimationHostView()
+        }
 
-    func makeNSView(context _: Context) -> ImplicitAnimationHostView {
-        ImplicitAnimationHostView()
+        func updateNSView(_ view: ImplicitAnimationHostView, context: Context) {
+            guard context.coordinator.lastRunToken != runToken else { return }
+            context.coordinator.lastRunToken = runToken
+            view.run(mode: mode)
+        }
+
+        final class Coordinator {
+            var lastRunToken: Int
+            init(runToken: Int) {
+                lastRunToken = runToken
+            }
+        }
     }
 
-    func updateNSView(_ view: ImplicitAnimationHostView, context: Context) {
-        guard context.coordinator.lastRunToken != runToken else { return }
-        context.coordinator.lastRunToken = runToken
-        view.run(mode: mode)
+    @MainActor
+    struct OffscreenRenderingRepresentable: NSViewRepresentable {
+        let usesShadowPath: Bool
+
+        func makeNSView(context _: Context) -> OffscreenRenderingHostView {
+            OffscreenRenderingHostView()
+        }
+
+        func updateNSView(_ view: OffscreenRenderingHostView, context _: Context) {
+            view.usesShadowPath = usesShadowPath
+        }
     }
 
-    final class Coordinator {
-        var lastRunToken: Int
-        init(runToken: Int) { lastRunToken = runToken }
+    @MainActor
+    struct ManualMetalLayerRepresentable: NSViewRepresentable {
+        let time: TimeInterval
+
+        func makeCoordinator() -> ManualMetalCoordinator {
+            ManualMetalCoordinator()
+        }
+
+        func makeNSView(context: Context) -> PlatformMetalLayerView {
+            let view = PlatformMetalLayerView()
+            context.coordinator.configure(view: view)
+            return view
+        }
+
+        func updateNSView(_ view: PlatformMetalLayerView, context: Context) {
+            context.coordinator.draw(
+                view: view,
+                time: time,
+                scale: view.window?.backingScaleFactor ?? 2
+            )
+        }
     }
-}
-
-@MainActor
-struct OffscreenRenderingRepresentable: NSViewRepresentable {
-    let usesShadowPath: Bool
-
-    func makeNSView(context _: Context) -> OffscreenRenderingHostView {
-        OffscreenRenderingHostView()
-    }
-
-    func updateNSView(_ view: OffscreenRenderingHostView, context _: Context) {
-        view.usesShadowPath = usesShadowPath
-    }
-}
-
-@MainActor
-struct ManualMetalLayerRepresentable: NSViewRepresentable {
-    let time: TimeInterval
-
-    func makeCoordinator() -> ManualMetalCoordinator { ManualMetalCoordinator() }
-
-    func makeNSView(context: Context) -> PlatformMetalLayerView {
-        let view = PlatformMetalLayerView()
-        context.coordinator.configure(view: view)
-        return view
-    }
-
-    func updateNSView(_ view: PlatformMetalLayerView, context: Context) {
-        context.coordinator.draw(
-            view: view,
-            time: time,
-            scale: view.window?.backingScaleFactor ?? 2
-        )
-    }
-}
 #endif
 
 @MainActor
@@ -169,39 +181,44 @@ enum MetalDemoKind {
 }
 
 #if canImport(UIKit)
-@MainActor
-struct MetalViewRepresentable: UIViewRepresentable {
-    let kind: MetalDemoKind
+    @MainActor
+    struct MetalViewRepresentable: UIViewRepresentable {
+        let kind: MetalDemoKind
 
-    func makeCoordinator() -> MetalViewCoordinator { MetalViewCoordinator() }
+        func makeCoordinator() -> MetalViewCoordinator {
+            MetalViewCoordinator()
+        }
 
-    func makeUIView(context: Context) -> MTKView {
-        makeView(context: context)
+        func makeUIView(context: Context) -> MTKView {
+            makeView(context: context)
+        }
+
+        func updateUIView(_: MTKView, context _: Context) {}
+
+        private func makeView(context: Context) -> MTKView {
+            let view = MTKView()
+            context.coordinator.install(kind: kind, in: view)
+            return view
+        }
     }
 
-    func updateUIView(_: MTKView, context _: Context) {}
-
-    private func makeView(context: Context) -> MTKView {
-        let view = MTKView()
-        context.coordinator.install(kind: kind, in: view)
-        return view
-    }
-}
 #elseif canImport(AppKit)
-@MainActor
-struct MetalViewRepresentable: NSViewRepresentable {
-    let kind: MetalDemoKind
+    @MainActor
+    struct MetalViewRepresentable: NSViewRepresentable {
+        let kind: MetalDemoKind
 
-    func makeCoordinator() -> MetalViewCoordinator { MetalViewCoordinator() }
+        func makeCoordinator() -> MetalViewCoordinator {
+            MetalViewCoordinator()
+        }
 
-    func makeNSView(context: Context) -> MTKView {
-        let view = MTKView()
-        context.coordinator.install(kind: kind, in: view)
-        return view
+        func makeNSView(context: Context) -> MTKView {
+            let view = MTKView()
+            context.coordinator.install(kind: kind, in: view)
+            return view
+        }
+
+        func updateNSView(_: MTKView, context _: Context) {}
     }
-
-    func updateNSView(_: MTKView, context _: Context) {}
-}
 #endif
 
 @MainActor
@@ -222,4 +239,3 @@ final class MetalViewCoordinator {
         }
     }
 }
-

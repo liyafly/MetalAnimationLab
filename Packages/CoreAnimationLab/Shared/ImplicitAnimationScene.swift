@@ -72,4 +72,3 @@ final class ImplicitAnimationScene {
         subjectLayer.position
     }
 }
-

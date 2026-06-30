@@ -1,7 +1,6 @@
+@testable import CoreAnimationLab
 import CoreGraphics
 import Testing
-
-@testable import CoreAnimationLab
 
 @Test
 func snapshotDescribesLayerGeometry() {

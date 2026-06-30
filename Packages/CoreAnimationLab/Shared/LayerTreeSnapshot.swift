@@ -42,4 +42,3 @@ public struct LayerTreeSnapshot: Equatable, Sendable {
         String(format: "(%.1f, %.1f)", Double(point.x), Double(point.y))
     }
 }
-

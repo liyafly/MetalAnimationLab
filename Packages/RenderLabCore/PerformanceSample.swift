@@ -11,4 +11,3 @@ public struct PerformanceSample: Equatable, Sendable {
         isHitch = frameDuration >= hitchThreshold
     }
 }
-

@@ -1,6 +1,5 @@
-import Testing
-
 @testable import AnimationPlayground
+import Testing
 
 @Test
 func registryKeepsStableExperimentOrder() {

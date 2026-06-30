@@ -7,10 +7,12 @@ struct LayerTreeExperimentView: View {
             LayerTreeRepresentable()
                 .frame(minHeight: 300)
                 .clipShape(RoundedRectangle(cornerRadius: 18))
-            Text("The blue subject layer keeps a fixed bounds and anchor point while its position is derived from the host view's current bounds.")
-                .font(.callout)
-                .foregroundStyle(.secondary)
+            Text(
+                "The blue subject layer keeps fixed bounds and anchor point while "
+                    + "its position follows the host view's current bounds."
+            )
+            .font(.callout)
+            .foregroundStyle(.secondary)
         }
     }
 }
-

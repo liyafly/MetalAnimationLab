@@ -25,4 +25,3 @@ public struct ExperimentDescriptor: Identifiable, Hashable, Sendable {
         self.isRequired = isRequired
     }
 }
-

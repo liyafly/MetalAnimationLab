@@ -1,0 +1,68 @@
+included:
+  - Apps
+  - Packages
+
+excluded:
+  - .build
+  - .worktrees
+  - DerivedData
+
+disabled_rules:
+  # SwiftFormat owns these rules. Disabling duplicates prevents contradictory reports.
+  - opening_brace
+  - static_over_final_class
+  - trailing_comma
+
+opt_in_rules:
+  - array_init
+  - closure_spacing
+  - collection_alignment
+  - contains_over_filter_count
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - first_where
+  - force_unwrapping
+  - last_where
+  - modifier_order
+  - multiline_arguments
+  - multiline_parameters
+  - sorted_imports
+  - toggle_bool
+  - vertical_parameter_alignment_on_call
+
+force_cast: error
+force_try: error
+force_unwrapping: error
+
+line_length:
+  warning: 120
+  error: 160
+  ignores_comments: true
+  ignores_urls: true
+
+file_length:
+  warning: 600
+  error: 900
+
+type_body_length:
+  warning: 350
+  error: 500
+
+function_body_length:
+  warning: 60
+  error: 100
+
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+identifier_name:
+  min_length: 2
+  excluded:
+    - id
+    - x
+    - y
+    - uv
+
+reporter: xcode

@@ -1,0 +1,15 @@
+--swiftversion 6.0
+--language-mode 6
+--indent 4
+--linebreaks lf
+--maxwidth 120
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--ifdef indent
+--self remove
+--stripunusedargs closure-only
+--semicolons never
+--header ignore
+--exclude .build,DerivedData,.worktrees
+

@@ -1,6 +1,5 @@
-import Testing
-
 @testable import RenderLabCore
+import Testing
 
 @Test
 func frameMetricsRecordsSamples() {
@@ -24,4 +23,3 @@ func frameMetricsIgnoresInvalidDurations() {
     #expect(metrics.sampleCount == 0)
     #expect(metrics.averageFPS == 0)
 }
-

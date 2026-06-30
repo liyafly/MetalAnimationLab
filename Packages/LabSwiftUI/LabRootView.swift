@@ -57,4 +57,3 @@ private struct ExperimentRow: View {
         .padding(.vertical, 5)
     }
 }
-

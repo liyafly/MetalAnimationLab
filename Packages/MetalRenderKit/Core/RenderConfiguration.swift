@@ -12,4 +12,3 @@ public struct RenderConfiguration: Equatable, Sendable {
         self.sampleCount = sampleCount
     }
 }
-

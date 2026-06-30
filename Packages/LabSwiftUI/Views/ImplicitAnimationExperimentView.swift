@@ -24,4 +24,3 @@ struct ImplicitAnimationExperimentView: View {
         }
     }
 }
-

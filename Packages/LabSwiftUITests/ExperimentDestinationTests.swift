@@ -1,7 +1,6 @@
 import AnimationPlayground
-import Testing
-
 @testable import LabSwiftUI
+import Testing
 
 @Test
 func everyRegisteredExperimentHasADestination() {

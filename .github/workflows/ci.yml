@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-and-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: brew install swiftformat swiftlint xcodegen
+      - name: Format and lint
+        run: ./Scripts/lint.sh
+      - name: Verify public boundary
+        run: ./Scripts/verify_public_boundary.sh
+      - name: Test packages
+        run: swift test
+      - name: Generate projects
+        run: ./Scripts/generate_projects.sh
+      - name: Build iOS host
+        run: >-
+          xcodebuild
+          -project Apps/MetalAnimationLabiOS/MetalAnimationLabiOS.xcodeproj
+          -scheme MetalAnimationLabiOS
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+          build
+      - name: Build macOS host
+        run: >-
+          xcodebuild
+          -project Apps/MetalAnimationLabmacOS/MetalAnimationLabmacOS.xcodeproj
+          -scheme MetalAnimationLabmacOS
+          -destination 'platform=macOS'
+          CODE_SIGNING_ALLOWED=NO
+          build

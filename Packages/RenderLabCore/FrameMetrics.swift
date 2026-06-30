@@ -39,4 +39,3 @@ public struct FrameMetrics: Equatable, Sendable {
         latestSample = nil
     }
 }
-
