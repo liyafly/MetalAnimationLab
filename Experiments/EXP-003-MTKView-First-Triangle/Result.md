@@ -2,5 +2,4 @@
 
 - Toolchain: Xcode 26.6, Swift 6.3.3
 - Build status: iOS and macOS passed
-- Runtime status: pending final visual verification
-
+- Runtime status: iOS Simulator rendered the Metal triangle; the macOS host builds successfully

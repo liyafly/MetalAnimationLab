@@ -9,10 +9,12 @@
 /* Begin PBXBuildFile section */
 		57E0466CC99A4F12CA488685 /* LabSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 00DED985D2C4B9206E5B7433 /* LabSwiftUI */; };
 		6983AEA492A84DFAA5D98EA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6383A449F65436A38E3D49 /* AppDelegate.swift */; };
+		9F14FBAC1334F8E323BF3575 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9965B0304BD03DF031A5F76D /* Main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		75E6914D938B018EC96E5645 /* initial-implementation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "initial-implementation"; path = ../..; sourceTree = SOURCE_ROOT; };
+		9965B0304BD03DF031A5F76D /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		9F6383A449F65436A38E3D49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8736A5C70C510473A941BD3 /* MetalAnimationLabmacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalAnimationLabmacOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				9F6383A449F65436A38E3D49 /* AppDelegate.swift */,
+				9965B0304BD03DF031A5F76D /* Main.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -126,6 +129,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6983AEA492A84DFAA5D98EA8 /* AppDelegate.swift in Sources */,
+				9F14FBAC1334F8E323BF3575 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

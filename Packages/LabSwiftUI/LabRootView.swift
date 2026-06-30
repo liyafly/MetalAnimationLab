@@ -10,8 +10,14 @@ public struct LabRootView: View {
     public var body: some View {
         NavigationSplitView {
             List(DemoRegistry.standard, selection: $selectedID) { experiment in
-                ExperimentRow(experiment: experiment)
-                    .tag(experiment.id)
+                Button {
+                    selectedID = experiment.id
+                } label: {
+                    ExperimentRow(experiment: experiment)
+                }
+                .buttonStyle(.plain)
+                .tag(experiment.id)
+                .accessibilityIdentifier("experiment-\(experiment.id)")
             }
             .navigationTitle("Metal Animation Lab")
         } detail: {
