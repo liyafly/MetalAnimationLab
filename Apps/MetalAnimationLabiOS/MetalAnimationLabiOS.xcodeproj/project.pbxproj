@@ -14,7 +14,7 @@
 /* Begin PBXFileReference section */
 		2C8A18C5EB9594EF12B065E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D380B5FCACD1D4BC4276F25 /* MetalAnimationLabiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MetalAnimationLabiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F6F43101A378D0DA75D8455B /* initial-implementation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "initial-implementation"; path = ../..; sourceTree = SOURCE_ROOT; };
+		B0D5012DE0F691DD64BCF0AE /* MetalAnimationLab */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalAnimationLab; path = ../..; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +49,7 @@
 		5E16139A749EF316E54F0028 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				F6F43101A378D0DA75D8455B /* initial-implementation */,
+				B0D5012DE0F691DD64BCF0AE /* MetalAnimationLab */,
 			);
 			name = Packages;
 			sourceTree = "<group>";

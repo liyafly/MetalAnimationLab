@@ -13,7 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		75E6914D938B018EC96E5645 /* initial-implementation */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "initial-implementation"; path = ../..; sourceTree = SOURCE_ROOT; };
+		0A7C086CA66DE1912DB5E4D5 /* MetalAnimationLab */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MetalAnimationLab; path = ../..; sourceTree = SOURCE_ROOT; };
 		9965B0304BD03DF031A5F76D /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		9F6383A449F65436A38E3D49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8736A5C70C510473A941BD3 /* MetalAnimationLabmacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalAnimationLabmacOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,7 +43,7 @@
 		1FFE949950C1316A24C86961 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				75E6914D938B018EC96E5645 /* initial-implementation */,
+				0A7C086CA66DE1912DB5E4D5 /* MetalAnimationLab */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
