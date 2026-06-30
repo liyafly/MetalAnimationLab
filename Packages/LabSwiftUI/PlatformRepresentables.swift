@@ -1,6 +1,7 @@
 import CoreAnimationLab
 import MetalKit
 import MetalRenderKit
+import RenderLabCore
 import SwiftUI
 
 #if canImport(UIKit)
@@ -153,6 +154,7 @@ import SwiftUI
 @MainActor
 final class ManualMetalCoordinator {
     private let renderer: CAMetalLayerRenderer?
+    private var clock = RenderClock()
 
     init() {
         renderer = try? CAMetalLayerRenderer()
@@ -171,7 +173,7 @@ final class ManualMetalCoordinator {
             width: max(1, view.bounds.width * scale),
             height: max(1, view.bounds.height * scale)
         )
-        renderer?.draw(layer: layer, time: Float(time))
+        renderer?.draw(layer: layer, time: clock.elapsedTime(at: time))
     }
 }
 
