@@ -1,0 +1,78 @@
+# Xcode user state
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Xcode build products and diagnostics
+DerivedData/
+build/
+*.hmap
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.xcresult
+*.moved-aside
+*.gputrace
+*.memgraph
+
+# Swift Package Manager generated state
+.build/
+Packages/
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+.swiftpm/security/
+
+# Keep Package.resolved tracked for reproducible app builds.
+
+# Local worktrees
+.worktrees/
+worktrees/
+
+# macOS filesystem metadata
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+
+# Editors and local IDE state
+.idea/
+.vscode/
+*.swp
+*~
+
+# Local AI and agent state
+.codex/
+.claude/
+.cursor/
+.windsurf/
+.continue/
+.copilot/
+.gemini/
+.aider*
+.mcp.json
+AGENTS.local.md
+CLAUDE.local.md
+GEMINI.local.md
+
+# Private agent planning and development documents
+docs/superpowers/
+
+# Secrets and signing material
+.env
+.env.*
+!.env.example
+.netrc
+*.p12
+*.mobileprovision
+*.cer
+*.key
+
+# Local logs and generated experiment evidence
+*.log
+Reports/local/
+Experiments/**/traces/*
+!Experiments/**/traces/.gitkeep
+Experiments/**/recordings/*
+!Experiments/**/recordings/.gitkeep
+Experiments/**/screenshots/local/
+
