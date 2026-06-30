@@ -4,6 +4,22 @@ MetalAnimationLab is a cross-platform laboratory for studying Core Animation, Me
 
 The repository uses native UIKit and AppKit application shells, shared SwiftUI experiment interfaces, and reusable Swift Package modules.
 
+## Open the lab
+
+```bash
+./Scripts/generate_projects.sh
+open MetalAnimationLab.xcworkspace
+```
+
+The workspace contains separate `MetalAnimationLabiOS` and `MetalAnimationLabmacOS` schemes. The root `Package.swift` exposes reusable products without depending on either application shell.
+
+## Validate
+
+```bash
+swift test
+./Scripts/lint.sh
+```
+
 ## Initial experiments
 
 - EXP-001: Layer Tree Basics
@@ -17,7 +33,10 @@ The repository uses native UIKit and AppKit application shells, shared SwiftUI e
 
 The first milestone focuses on Core Animation and Metal. Future milestones may add AVFoundation video frames, CVMetalTextureCache integration, realtime video effects, Vision, and Core ML.
 
+## Repository boundary
+
+This public repository contains reusable foundations and teaching shaders. Product-specific shaders, presets, resources, and compositions belong in a separate private package.
+
 ## License
 
 MetalAnimationLab is available under the MIT License.
-
