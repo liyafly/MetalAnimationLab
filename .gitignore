@@ -74,3 +74,4 @@ Experiments/**/traces/*
 Experiments/**/recordings/*
 !Experiments/**/recordings/.gitkeep
 Experiments/**/screenshots/local/
+*.xcworkspacedata
