@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "RenderLabCore", targets: ["RenderLabCore"]),
         .library(name: "AnimationPlayground", targets: ["AnimationPlayground"]),
         .library(name: "MetalRenderKit", targets: ["MetalRenderKit"]),
+        .library(name: "CoreAnimationLab", targets: ["CoreAnimationLab"]),
     ],
     targets: [
         .target(
@@ -28,6 +29,11 @@ let package = Package(
             path: "Packages/MetalRenderKit",
             resources: [.process("Shaders")]
         ),
+        .target(
+            name: "CoreAnimationLab",
+            dependencies: ["RenderLabCore"],
+            path: "Packages/CoreAnimationLab"
+        ),
         .testTarget(
             name: "RenderLabCoreTests",
             dependencies: ["RenderLabCore"],
@@ -42,6 +48,11 @@ let package = Package(
             name: "MetalRenderKitTests",
             dependencies: ["MetalRenderKit"],
             path: "Packages/MetalRenderKitTests"
+        ),
+        .testTarget(
+            name: "CoreAnimationLabTests",
+            dependencies: ["CoreAnimationLab"],
+            path: "Packages/CoreAnimationLabTests"
         ),
     ],
     swiftLanguageModes: [.v6]
