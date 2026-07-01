@@ -180,12 +180,16 @@ final class ManualMetalCoordinator {
 enum MetalDemoKind {
     case triangle
     case particles
+    case nightSky
+    case ambientShadow
 }
 
 #if canImport(UIKit)
     @MainActor
     struct MetalViewRepresentable: UIViewRepresentable {
         let kind: MetalDemoKind
+        var isActive = true
+        var reduceMotion = false
 
         func makeCoordinator() -> MetalViewCoordinator {
             MetalViewCoordinator()
@@ -195,11 +199,22 @@ enum MetalDemoKind {
             makeView(context: context)
         }
 
-        func updateUIView(_: MTKView, context _: Context) {}
+        func updateUIView(_ view: MTKView, context: Context) {
+            context.coordinator.update(
+                view: view,
+                isActive: isActive,
+                reduceMotion: reduceMotion
+            )
+        }
 
         private func makeView(context: Context) -> MTKView {
             let view = MTKView()
             context.coordinator.install(kind: kind, in: view)
+            context.coordinator.update(
+                view: view,
+                isActive: isActive,
+                reduceMotion: reduceMotion
+            )
             return view
         }
     }
@@ -208,6 +223,8 @@ enum MetalDemoKind {
     @MainActor
     struct MetalViewRepresentable: NSViewRepresentable {
         let kind: MetalDemoKind
+        var isActive = true
+        var reduceMotion = false
 
         func makeCoordinator() -> MetalViewCoordinator {
             MetalViewCoordinator()
@@ -216,16 +233,28 @@ enum MetalDemoKind {
         func makeNSView(context: Context) -> MTKView {
             let view = MTKView()
             context.coordinator.install(kind: kind, in: view)
+            context.coordinator.update(
+                view: view,
+                isActive: isActive,
+                reduceMotion: reduceMotion
+            )
             return view
         }
 
-        func updateNSView(_: MTKView, context _: Context) {}
+        func updateNSView(_ view: MTKView, context: Context) {
+            context.coordinator.update(
+                view: view,
+                isActive: isActive,
+                reduceMotion: reduceMotion
+            )
+        }
     }
 #endif
 
 @MainActor
 final class MetalViewCoordinator {
     private var delegate: (any MTKViewDelegate)?
+    private var proceduralRenderer: ProceduralSceneRenderer?
 
     func install(kind: MetalDemoKind, in view: MTKView) {
         do {
@@ -234,10 +263,34 @@ final class MetalViewCoordinator {
                 delegate = try TriangleRenderer(view: view)
             case .particles:
                 delegate = try ParticleRenderer(view: view)
+            case .nightSky:
+                let renderer = try ProceduralSceneRenderer(
+                    view: view,
+                    kind: .nightSky,
+                    parameters: .nightSky
+                )
+                proceduralRenderer = renderer
+                delegate = renderer
+            case .ambientShadow:
+                let renderer = try ProceduralSceneRenderer(
+                    view: view,
+                    kind: .ambientShadow,
+                    parameters: .ambientShadow
+                )
+                proceduralRenderer = renderer
+                delegate = renderer
             }
             view.delegate = delegate
         } catch {
             view.clearColor = MTLClearColor(red: 0.3, green: 0.02, blue: 0.04, alpha: 1)
         }
+    }
+
+    func update(view: MTKView, isActive: Bool, reduceMotion: Bool) {
+        proceduralRenderer?.setMotionState(
+            isActive: isActive,
+            reduceMotion: reduceMotion,
+            in: view
+        )
     }
 }

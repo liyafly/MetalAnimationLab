@@ -49,5 +49,12 @@ public enum DemoRegistry {
             category: .metal,
             isRequired: false
         ),
+        ExperimentDescriptor(
+            id: "EXP-008",
+            title: "Procedural Night Sky",
+            summary: "Combine deterministic stars with slowly drifting partial clouds.",
+            category: .metal,
+            isRequired: false
+        ),
     ]
 }

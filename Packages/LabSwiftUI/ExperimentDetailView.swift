@@ -45,6 +45,8 @@ struct ExperimentDetailView: View {
             ParticleExperimentView()
         case .symbolLightSweep:
             SymbolLightSweepExperimentView()
+        case .nightSky:
+            NightSkyExperimentView()
         case nil:
             ContentUnavailableView("Experiment unavailable", systemImage: "exclamationmark.triangle")
         }

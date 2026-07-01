@@ -124,3 +124,99 @@ fragment float4 lab_manual_layer_fragment(
     half3 glowColor = half3(0.74, 0.84, 1.0) * glow;
     return half4(litColor + glowColor, max(source.a, glow));
 }
+
+struct LabProceduralUniforms {
+    float2 resolution;
+    float time;
+    float motionScale;
+    uint seed;
+    uint padding;
+};
+
+float lab_hash21(float2 p) {
+    float3 p3 = fract(float3(p.xyx) * 0.1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+float2 lab_hash22(float2 p) {
+    float n = lab_hash21(p);
+    return float2(n, lab_hash21(p + n + 19.19));
+}
+
+float lab_value_noise(float2 p) {
+    float2 cell = floor(p);
+    float2 local = fract(p);
+    float2 blend = local * local * (3.0 - 2.0 * local);
+    float a = lab_hash21(cell);
+    float b = lab_hash21(cell + float2(1.0, 0.0));
+    float c = lab_hash21(cell + float2(0.0, 1.0));
+    float d = lab_hash21(cell + float2(1.0, 1.0));
+    return mix(mix(a, b, blend.x), mix(c, d, blend.x), blend.y);
+}
+
+float lab_fbm(float2 p) {
+    float value = 0.0;
+    float amplitude = 0.52;
+    float2x2 rotation = float2x2(float2(0.80, -0.60), float2(0.60, 0.80));
+    for (int octave = 0; octave < 5; ++octave) {
+        value += lab_value_noise(p) * amplitude;
+        p = rotation * p * 2.03 + 11.7;
+        amplitude *= 0.5;
+    }
+    return value;
+}
+
+fragment float4 lab_night_sky_fragment(
+    LabVertexOut input [[stage_in]],
+    constant LabProceduralUniforms &uniforms [[buffer(0)]]
+) {
+    float2 resolution = max(uniforms.resolution, float2(1.0));
+    float2 uv = input.position.xy / resolution;
+    float aspect = resolution.x / resolution.y;
+    float time = uniforms.time * uniforms.motionScale;
+    float seedOffset = float(uniforms.seed & 0xffffu) * 0.00017;
+
+    float3 horizon = float3(0.075, 0.09, 0.21);
+    float3 zenith = float3(0.018, 0.025, 0.09);
+    float3 color = mix(zenith, horizon, smoothstep(0.0, 1.0, uv.y));
+
+    float2 starScale = float2(112.0 * aspect, 112.0);
+    float2 starSpace = uv * starScale;
+    float2 starCell = floor(starSpace);
+    float2 starLocal = fract(starSpace);
+    float density = lab_hash21(starCell + seedOffset);
+    float2 starCenter = 0.12 + 0.76 * lab_hash22(starCell + seedOffset + 7.3);
+    float starDistance = length(starLocal - starCenter);
+    float radius = mix(0.025, 0.075, lab_hash21(starCell + 31.4));
+    float starShape = 1.0 - smoothstep(radius * 0.35, radius, starDistance);
+    float starExists = step(0.89, density);
+    float twinklePhase = lab_hash21(starCell + 71.9) * 6.2831853;
+    float twinkleSpeed = mix(0.35, 1.05, lab_hash21(starCell + 14.2));
+    float twinkle = 0.72 + 0.28 * sin(twinklePhase + time * twinkleSpeed);
+    float warmth = lab_hash21(starCell + 93.7);
+    float3 starColor = mix(float3(0.70, 0.79, 1.0), float3(1.0, 0.88, 0.72), warmth * 0.35);
+    float stars = starShape * starExists * max(0.3, twinkle);
+
+    float2 cloudPosition = float2(uv.x * aspect, uv.y) * 2.35;
+    cloudPosition.x += time * 0.012;
+    cloudPosition += seedOffset * 0.31;
+    float2 warp = float2(
+        lab_fbm(cloudPosition * 0.62 + 4.7),
+        lab_fbm(cloudPosition * 0.58 + 17.3)
+    ) - 0.5;
+    float cloudNoise = lab_fbm(cloudPosition + warp * 0.72);
+    float cloudBody = smoothstep(0.54, 0.72, cloudNoise);
+    float upperBias = 1.0 - smoothstep(0.08, 0.90, uv.y);
+    float cloud = cloudBody * mix(0.42, 1.0, upperBias);
+
+    color += starColor * stars * (1.0 - cloud * 0.72);
+    float3 cloudColor = mix(float3(0.13, 0.15, 0.29), float3(0.25, 0.28, 0.43), cloudNoise);
+    color = mix(color, cloudColor, cloud * 0.62);
+
+    float2 centered = uv - 0.5;
+    centered.x *= aspect;
+    float vignette = smoothstep(0.95, 0.25, length(centered));
+    color *= mix(0.72, 1.0, vignette);
+    return float4(color, 1.0);
+}
