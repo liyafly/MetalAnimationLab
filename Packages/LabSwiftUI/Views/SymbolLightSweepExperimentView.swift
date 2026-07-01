@@ -28,14 +28,13 @@ struct SymbolLightSweepExperimentView: View {
                     let time = clock.elapsedTime(at: context.date, paused: activity.isPaused)
 
                     ZStack {
+                        Color(red: 0.055, green: 0.065, blue: 0.09)
                         RadialGradient(
-                            colors: [Color.white.opacity(0.08), Color.black.opacity(0.34)],
+                            colors: [Color.white.opacity(0.10), Color.clear],
                             center: .top,
                             startRadius: 0,
                             endRadius: max(size.width, size.height) * 0.7
                         )
-                        Color(red: 0.055, green: 0.065, blue: 0.09)
-                            .blendMode(.destinationOver)
 
                         Image(systemName: "heart.fill")
                             .font(.system(size: min(size.width, size.height) * 0.36, weight: .medium))
