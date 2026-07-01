@@ -106,7 +106,7 @@ The experiment uses fixed seeds and contains no plant texture, photograph, SVG, 
 
 ## Shared Runtime Behavior
 
-Each animated view reads `scenePhase` and `accessibilityReduceMotion` from SwiftUI:
+Each animated view reads `accessibilityReduceMotion` from SwiftUI and application activity from a small platform monitor backed by AppKit or UIKit notifications. The native activity monitor is required because this repository embeds SwiftUI in custom UIKit and AppKit shells rather than using a SwiftUI app lifecycle:
 
 - Active plus normal motion: advance elapsed time and render at the experiment's preferred cadence.
 - Inactive or background: pause the timeline or `MTKView`.

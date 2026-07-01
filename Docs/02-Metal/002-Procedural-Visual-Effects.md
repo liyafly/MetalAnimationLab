@@ -85,7 +85,7 @@ Each leaf group also varies its penumbra width slightly with wind displacement. 
 
 Wall-clock subtraction causes animation jumps after an app resumes. `RenderClock` tracks accumulated paused duration and excludes it from elapsed time. Repeated pause or resume notifications are idempotent.
 
-SwiftUI supplies `scenePhase` and `accessibilityReduceMotion`:
+The custom AppKit shell hosts SwiftUI through `NSHostingController`, where `scenePhase` is not a reliable source of application activity. `PlatformActivityMonitor` therefore maps native AppKit or UIKit active/resign notifications into observable state. SwiftUI still supplies `accessibilityReduceMotion`:
 
 - Inactive views pause their timeline or `MTKView`.
 - Reduce Motion renders a deterministic frame with a zero motion scale.
