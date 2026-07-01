@@ -28,6 +28,9 @@ swift test
 - EXP-004: Offscreen Rendering
 - EXP-005: CAMetalLayer Manual Renderer
 - EXP-006: Metal Particle Animation
+- EXP-007: SF Symbol Light Sweep
+- EXP-008: Procedural Night Sky
+- EXP-009: Ambient Light and Shadow
 
 ## Roadmap
 

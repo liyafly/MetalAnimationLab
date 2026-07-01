@@ -7,6 +7,13 @@
 ## Metal
 
 - [Device, Command Queue, and Command Buffer](02-Metal/001-Device-CommandQueue-CommandBuffer.md)
+- [Procedural Visual Effects](02-Metal/002-Procedural-Visual-Effects.md)
+
+## Experiments
+
+- [EXP-007: SF Symbol Light Sweep](../Experiments/EXP-007-SF-Symbol-Light-Sweep/README.md)
+- [EXP-008: Procedural Night Sky](../Experiments/EXP-008-Procedural-Night-Sky/README.md)
+- [EXP-009: Ambient Light and Shadow](../Experiments/EXP-009-Ambient-Light-Shadow/README.md)
 
 ## Architecture
 
