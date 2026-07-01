@@ -12,7 +12,10 @@
 
 - [ADR-001: Native shells with a shared core](../Knowledge/decisions/adr-001-native-shells-shared-core.md)
 
+## Designs
+
+- [Procedural Visual Experiments](designs/2026-07-01-procedural-visual-experiments.md)
+
 ## Roadmap
 
 The initial milestone covers Core Animation and Metal. Later packages may add AVFoundation frame acquisition, CVPixelBuffer/CVMetalTextureCache bridging, realtime video effects, Vision, and Core ML inference.
-
