@@ -1,4 +1,5 @@
 #include <metal_stdlib>
+#include <SwiftUI/SwiftUI_Metal.h>
 using namespace metal;
 
 struct LabVertexOut {
@@ -89,4 +90,37 @@ fragment float4 lab_manual_layer_fragment(
     float2 uv = input.position.xy * 0.0025;
     float wave = 0.5 + 0.5 * sin(time + uv.x * 6.0 + uv.y * 4.0);
     return float4(0.08 + wave * 0.18, 0.18 + wave * 0.35, 0.55 + wave * 0.4, 1.0);
+}
+
+[[ stitchable ]] half4 lab_symbol_light_sweep(
+    float2 position,
+    SwiftUI::Layer layer,
+    float2 size,
+    float time,
+    float cycleDuration,
+    float sweepDuration,
+    float angle,
+    float softness,
+    float intensity
+) {
+    half4 source = layer.sample(position);
+    float2 safeSize = max(size, float2(1.0));
+    float2 uv = position / safeSize;
+    float phase = fmod(max(0.0, time), max(1.0, cycleDuration));
+    float progress = clamp(phase / max(0.1, sweepDuration), 0.0, 1.0);
+    float active = 1.0 - step(sweepDuration, phase);
+    float2 direction = float2(cos(angle), sin(angle));
+    float projected = dot(uv - 0.5, direction);
+    float center = mix(-0.8, 0.8, progress);
+    float band = 1.0 - smoothstep(softness * 0.2, softness, abs(projected - center));
+    float light = band * active * intensity;
+
+    half nearbyAlpha = max(
+        max(layer.sample(position + float2(5.0, 0.0)).a, layer.sample(position - float2(5.0, 0.0)).a),
+        max(layer.sample(position + float2(0.0, 5.0)).a, layer.sample(position - float2(0.0, 5.0)).a)
+    );
+    half glow = half(light) * max(half(0.0), nearbyAlpha - source.a) * half(0.32);
+    half3 litColor = source.rgb + half3(light) * source.a;
+    half3 glowColor = half3(0.74, 0.84, 1.0) * glow;
+    return half4(litColor + glowColor, max(source.a, glow));
 }

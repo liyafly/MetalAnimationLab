@@ -5,6 +5,7 @@ public enum ExperimentDestination: String, CaseIterable, Sendable {
     case offscreenRendering = "EXP-004"
     case manualMetalLayer = "EXP-005"
     case particles = "EXP-006"
+    case symbolLightSweep = "EXP-007"
 
     public init?(experimentID: String) {
         self.init(rawValue: experimentID)

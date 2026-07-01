@@ -42,5 +42,12 @@ public enum DemoRegistry {
             category: .metal,
             isRequired: false
         ),
+        ExperimentDescriptor(
+            id: "EXP-007",
+            title: "SF Symbol Light Sweep",
+            summary: "Sweep soft procedural light across a native SF Symbol.",
+            category: .metal,
+            isRequired: false
+        ),
     ]
 }

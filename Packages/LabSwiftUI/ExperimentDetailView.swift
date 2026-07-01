@@ -43,6 +43,8 @@ struct ExperimentDetailView: View {
             CAMetalLayerExperimentView()
         case .particles:
             ParticleExperimentView()
+        case .symbolLightSweep:
+            SymbolLightSweepExperimentView()
         case nil:
             ContentUnavailableView("Experiment unavailable", systemImage: "exclamationmark.triangle")
         }
