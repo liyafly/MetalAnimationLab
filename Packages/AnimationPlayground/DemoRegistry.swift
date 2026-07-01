@@ -56,5 +56,12 @@ public enum DemoRegistry {
             category: .metal,
             isRequired: false
         ),
+        ExperimentDescriptor(
+            id: "EXP-009",
+            title: "Ambient Light and Shadow",
+            summary: "Hold major branches still while independent leaf shadows move.",
+            category: .metal,
+            isRequired: false
+        ),
     ]
 }

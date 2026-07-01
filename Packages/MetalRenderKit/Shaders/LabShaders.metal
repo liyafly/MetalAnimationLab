@@ -220,3 +220,91 @@ fragment float4 lab_night_sky_fragment(
     color *= mix(0.72, 1.0, vignette);
     return float4(color, 1.0);
 }
+
+float lab_sd_capsule(float2 p, float2 a, float2 b, float radius) {
+    float2 pa = p - a;
+    float2 ba = b - a;
+    float h = clamp(dot(pa, ba) / max(0.0001, dot(ba, ba)), 0.0, 1.0);
+    return length(pa - ba * h) - radius;
+}
+
+float2 lab_rotate(float2 p, float angle) {
+    float sine = sin(angle);
+    float cosine = cos(angle);
+    return float2(cosine * p.x - sine * p.y, sine * p.x + cosine * p.y);
+}
+
+float lab_sd_ellipse(float2 p, float2 center, float2 radii, float angle) {
+    float2 local = lab_rotate(p - center, -angle);
+    return (length(local / max(radii, float2(0.0001))) - 1.0) * min(radii.x, radii.y);
+}
+
+float lab_leaf_group(float2 p, float2 anchor, float phase, float time, float direction) {
+    float wind = sin(time * 0.44 + phase);
+    float secondary = sin(time * 0.71 + phase * 1.7) * 0.35;
+    float angle = (wind + secondary) * 0.035 * direction;
+    float2 drift = float2(wind * 0.008 * direction, secondary * 0.004);
+    float2 local = lab_rotate(p - anchor - drift, -angle);
+
+    float distance = lab_sd_ellipse(local, float2(-0.065, -0.015), float2(0.055, 0.023), -0.35);
+    distance = min(distance, lab_sd_ellipse(local, float2(-0.018, 0.030), float2(0.050, 0.021), 0.42));
+    distance = min(distance, lab_sd_ellipse(local, float2(0.038, -0.026), float2(0.058, 0.024), -0.18));
+    distance = min(distance, lab_sd_ellipse(local, float2(0.082, 0.020), float2(0.048, 0.020), 0.55));
+    distance = min(distance, lab_sd_ellipse(local, float2(0.012, -0.067), float2(0.046, 0.019), 1.02));
+    return distance;
+}
+
+fragment float4 lab_ambient_shadow_fragment(
+    LabVertexOut input [[stage_in]],
+    constant LabProceduralUniforms &uniforms [[buffer(0)]]
+) {
+    float2 resolution = max(uniforms.resolution, float2(1.0));
+    float2 uv = input.position.xy / resolution;
+    float aspect = resolution.x / resolution.y;
+    float2 p = uv - 0.5;
+    p.x *= aspect;
+    float time = uniforms.time * uniforms.motionScale;
+    float seedOffset = float(uniforms.seed & 0xffffu) * 0.00023;
+
+    float major = lab_sd_capsule(p, float2(-0.78, -0.48), float2(0.82, 0.38), 0.030);
+    major = min(major, lab_sd_capsule(p, float2(-0.26, -0.19), float2(0.20, -0.49), 0.017));
+    major = min(major, lab_sd_capsule(p, float2(0.16, 0.02), float2(0.83, -0.10), 0.015));
+
+    float twigMotionA = sin(time * 0.31 + 1.3) * 0.003;
+    float twigMotionB = sin(time * 0.27 + 4.1) * 0.0025;
+    float twigs = lab_sd_capsule(
+        p,
+        float2(-0.43, -0.28),
+        float2(-0.74, -0.45 + twigMotionA),
+        0.006
+    );
+    twigs = min(
+        twigs,
+        lab_sd_capsule(p, float2(0.37, -0.02), float2(0.68, -0.29 + twigMotionB), 0.005)
+    );
+    twigs = min(
+        twigs,
+        lab_sd_capsule(p, float2(0.47, 0.19), float2(0.86, 0.16 - twigMotionA), 0.004)
+    );
+
+    float leavesA = lab_leaf_group(p, float2(-0.58, -0.37), 0.7 + seedOffset, time, 1.0);
+    float leavesB = lab_leaf_group(p, float2(0.31, -0.21), 2.9 + seedOffset, time, -1.0);
+    float leavesC = lab_leaf_group(p, float2(0.69, 0.11), 5.2 + seedOffset, time, 0.8);
+
+    float majorShadow = 1.0 - smoothstep(-0.006, 0.026, major);
+    float twigShadow = 1.0 - smoothstep(-0.004, 0.024, twigs);
+    float penumbraA = 0.026 + abs(sin(time * 0.44 + 0.7)) * 0.008;
+    float penumbraB = 0.025 + abs(sin(time * 0.44 + 2.9)) * 0.007;
+    float penumbraC = 0.027 + abs(sin(time * 0.44 + 5.2)) * 0.009;
+    float leafShadowA = 1.0 - smoothstep(-0.004, penumbraA, leavesA);
+    float leafShadowB = 1.0 - smoothstep(-0.004, penumbraB, leavesB);
+    float leafShadowC = 1.0 - smoothstep(-0.004, penumbraC, leavesC);
+    float shadow = max(max(majorShadow, twigShadow), max(leafShadowA, max(leafShadowB, leafShadowC)));
+
+    float paperNoise = lab_hash21(floor(input.position.xy * 0.48) + seedOffset) - 0.5;
+    float broadLight = 0.018 * sin(uv.x * 3.4 + uv.y * 2.1 + 0.8);
+    float3 paper = float3(0.925, 0.923, 0.905) + paperNoise * 0.018 + broadLight;
+    float3 shadowColor = float3(0.29, 0.31, 0.30);
+    float3 color = mix(paper, shadowColor, shadow * 0.28);
+    return float4(color, 1.0);
+}

@@ -12,6 +12,7 @@ func registryKeepsStableExperimentOrder() {
         "EXP-006",
         "EXP-007",
         "EXP-008",
+        "EXP-009",
     ])
 }
 

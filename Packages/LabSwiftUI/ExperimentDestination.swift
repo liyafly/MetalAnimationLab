@@ -7,6 +7,7 @@ public enum ExperimentDestination: String, CaseIterable, Sendable {
     case particles = "EXP-006"
     case symbolLightSweep = "EXP-007"
     case nightSky = "EXP-008"
+    case ambientShadow = "EXP-009"
 
     public init?(experimentID: String) {
         self.init(rawValue: experimentID)
