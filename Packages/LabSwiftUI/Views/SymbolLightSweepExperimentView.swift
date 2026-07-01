@@ -5,23 +5,27 @@ import SwiftUI
 @MainActor
 struct SymbolLightSweepExperimentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.scenePhase) private var scenePhase
+    @StateObject private var activityMonitor = PlatformActivityMonitor()
     @State private var clock = SymbolLightSweepClock()
 
     private let parameters = SymbolLightSweepParameters.standard
 
     var body: some View {
+        let activity = RenderActivityState(
+            isApplicationActive: activityMonitor.isActive,
+            reduceMotion: reduceMotion
+        )
+
         VStack(alignment: .leading, spacing: 12) {
             TimelineView(
                 .animation(
                     minimumInterval: 1.0 / 30.0,
-                    paused: scenePhase != .active || reduceMotion
+                    paused: activity.isPaused
                 )
             ) { context in
                 GeometryReader { proxy in
                     let size = proxy.size
-                    let isPaused = scenePhase != .active || reduceMotion
-                    let time = clock.elapsedTime(at: context.date, paused: isPaused)
+                    let time = clock.elapsedTime(at: context.date, paused: activity.isPaused)
 
                     ZStack {
                         RadialGradient(

@@ -3,13 +3,13 @@ import SwiftUI
 @MainActor
 struct NightSkyExperimentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.scenePhase) private var scenePhase
+    @StateObject private var activityMonitor = PlatformActivityMonitor()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             MetalViewRepresentable(
                 kind: .nightSky,
-                isActive: scenePhase == .active,
+                isActive: activityMonitor.isActive,
                 reduceMotion: reduceMotion
             )
             .frame(minHeight: 420)
